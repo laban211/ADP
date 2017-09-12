@@ -3,20 +3,6 @@
 
 #include <QWidget>
 
-<<<<<<< HEAD
-class Shape : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit Shape(QWidget *parent = nullptr);
-
-signals:
-
-public slots:
-};
-
-#endif // SHAPE_H
-=======
 class Shape
 {
 public:
@@ -39,4 +25,3 @@ public:
 };
 
 #endif // SHAPE_H
->>>>>>> jakoobsBranch
