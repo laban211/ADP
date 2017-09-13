@@ -3,7 +3,6 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include "shape.h"
-#include <QMenu>
 
 //drawing all 3 shapes
 void MainWindow::drawShape(QPainter &painter, Shape &shape)
@@ -18,7 +17,7 @@ void MainWindow::drawShape(QPainter &painter, Shape &shape)
         path.moveTo(shape._boundingRect.left() + (shape._boundingRect.width() / 2), shape._boundingRect.top());
         path.lineTo(shape._boundingRect.bottomRight());
         path.lineTo(shape._boundingRect.bottomLeft());
-        path.lineTo(shape._boundingRect.left() + (shape._boundingRect.width() / 2), shape._boundingRect.top());
+        path.closeSubpath();
         painter.drawPath(path);
     }
     else
@@ -43,12 +42,11 @@ MainWindow::~MainWindow()
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-
     painter.fillRect(event->rect(), Qt::white);
 
-    for (Shape &shape: _shapeFromIndex){
-        drawShape(painter, shape);
-     }
+        for(Shape &shape : _shapeFromIndex){
+            drawShape(painter, shape);
+        }
 }
 
 //toolbar buttons
@@ -71,4 +69,46 @@ void MainWindow::on_actionTriangle_triggered()
     Shape triangle(Shape::triangle, QRect(100,100,100,100), 3, Qt::white, Qt::black);
     _shapeFromIndex.push_back(triangle);
     update();
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+   _shapeMoving = shapeClicked(event->pos());
+    if (_shapeMoving){
+        _positionOfShapeWhenClicked = _shapeMoving->_boundingRect.topLeft();
+        _positionOfMouseWhenClicked = event->pos();
+    }
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if(_shapeMoving){
+        QPoint positionOfMouseNow = event->pos();
+        QPoint displacement = positionOfMouseNow - _positionOfMouseWhenClicked;
+        QPoint positionOfShapeNow = _positionOfShapeWhenClicked + displacement;
+        QRect newRect(positionOfShapeNow, _shapeMoving->_boundingRect.size());
+        _shapeMoving->_boundingRect = newRect;
+        update();
+    }
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    _shapeMoving = nullptr;
+}
+
+bool MainWindow::containsPoint(Shape &shape, QPoint point)
+{
+    QRegion::RegionType regionType = (shape._shapetype == Shape::ellipse ? QRegion::Ellipse : QRegion::Rectangle);
+    QRegion region(shape._boundingRect, regionType);
+    return region.contains(point);
+}
+
+Shape *MainWindow::shapeClicked(QPoint point)
+{
+    for (int i=_shapeFromIndex.size()-1; i>=0; i-=1){
+            if (containsPoint(_shapeFromIndex[i], point))
+                    return &_shapeFromIndex[i];
+        }
+    return nullptr;
 }

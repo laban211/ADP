@@ -30,3 +30,6 @@ HEADERS  += mainwindow.h \
     shape.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    appresource.qrc
