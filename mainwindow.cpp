@@ -14,11 +14,13 @@ void MainWindow::drawShape(QPainter &painter, Shape &shape)
         painter.drawEllipse(shape._boundingRect);
     }
     else if(shape._shapetype == Shape::triangle){
+       if(!_shapeMoving){
         path.moveTo(shape._boundingRect.left() + (shape._boundingRect.width() / 2), shape._boundingRect.top());
         path.lineTo(shape._boundingRect.bottomRight());
         path.lineTo(shape._boundingRect.bottomLeft());
         path.closeSubpath();
         painter.drawPath(path);
+       }
     }
     else
     {
