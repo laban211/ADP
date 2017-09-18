@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>572</width>
+    <height>352</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -19,8 +25,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
-     <height>22</height>
+     <width>572</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSquare">
@@ -54,6 +60,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionMover"/>
+   <addaction name="actionPainter"/>
   </widget>
   <action name="actionSquare">
    <property name="text">
@@ -68,6 +76,26 @@
   <action name="actionTriangle">
    <property name="text">
     <string>Triangle</string>
+   </property>
+  </action>
+  <action name="actionMover">
+   <property name="text">
+    <string>Mover</string>
+   </property>
+  </action>
+  <action name="actionPainter">
+   <property name="text">
+    <string>Painter</string>
+   </property>
+  </action>
+  <action name="actionShapeColor">
+   <property name="text">
+    <string>Colorpicker</string>
+   </property>
+  </action>
+  <action name="actionBorderColor">
+   <property name="text">
+    <string>bordercolor</string>
    </property>
   </action>
  </widget>

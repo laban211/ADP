@@ -4,6 +4,13 @@
 #include <QPaintEvent>
 #include "shape.h"
 #include <QMenu>
+#include <QDebug>
+#include <QColorDialog>
+#include <QApplication>
+#include <QPushButton>
+#include <QColor>
+
+
 
 //drawing all 3 shapes
 void MainWindow::drawShape(QPainter &painter, Shape &shape)
@@ -25,6 +32,7 @@ void MainWindow::drawShape(QPainter &painter, Shape &shape)
     {
         painter.drawRect(shape._boundingRect);
     }
+
 }
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -32,6 +40,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    QMainWindow::showMaximized();
+    //setting default colors
+    currentShapeColor = Qt::white;
+    currentBorderColor = Qt::black;
+    //Creates Shape Color box
+    colorShapeBox = new QPushButton(this);
+    ui->rightToolBar->addWidget(colorShapeBox);
+    colorShapeBox->setText("Shape color");
+    //Creates Border Color box
+    colorBorderBox = new QPushButton(this);
+    ui->rightToolBar->addWidget(colorBorderBox);
+    colorBorderBox->setText("Border color");
+
+
+    connect(colorShapeBox, SIGNAL(clicked()), this, SLOT(on_actionColorpicker_triggered()));
+    connect(colorBorderBox, SIGNAL(clicked()), this, SLOT(on_actionBorderColor_triggered()));
+
 }
 
 MainWindow::~MainWindow()
@@ -54,21 +79,42 @@ void MainWindow::paintEvent(QPaintEvent *event)
 //toolbar buttons
 void MainWindow::on_actionSquare_triggered()
 {
-    Shape square(Shape::rectangle, QRect(100,100,100,100), 3, Qt::white, Qt::black);
+    Shape square(Shape::rectangle, QRect(100,100,100,100), 3, currentShapeColor, currentBorderColor);
     _shapeFromIndex.push_back(square);
     update();
 }
 
 void MainWindow::on_actionCircle_triggered()
 {
-    Shape circle(Shape::ellipse, QRect(100,100,100,100), 3, Qt::white, Qt::black);
+    Shape circle(Shape::ellipse, QRect(100,100,100,100), 3, currentShapeColor, currentBorderColor);
     _shapeFromIndex.push_back(circle);
     update();
 }
 
 void MainWindow::on_actionTriangle_triggered()
 {
-    Shape triangle(Shape::triangle, QRect(100,100,100,100), 3, Qt::white, Qt::black);
+    Shape triangle(Shape::triangle, QRect(100,100,100,100), 3, currentShapeColor, currentBorderColor);
     _shapeFromIndex.push_back(triangle);
     update();
+}
+
+
+void MainWindow::on_actionColorpicker_triggered()
+{
+    currentShapeColor = QColorDialog::getColor();
+    colorShapeBoxColor = QString("background-color: %1").arg(currentShapeColor.name());
+    colorShapeBox->setStyleSheet(colorShapeBoxColor);
+
+}
+
+
+
+
+void MainWindow::on_actionBorderColor_triggered()
+{
+    currentBorderColor = QColorDialog::getColor();
+    colorBorderBoxColor = QString("background-color: %1").arg(currentBorderColor.name());
+    colorBorderBox->setStyleSheet(colorBorderBoxColor);
+
+
 }
