@@ -43,9 +43,6 @@
    <addaction name="actionSquare"/>
    <addaction name="actionCircle"/>
    <addaction name="actionTriangle"/>
-   <addaction name="actionMove"/>
-   <addaction name="actionDelete"/>
-   <addaction name="actionResize"/>
   </widget>
   <widget class="QToolBar" name="rightToolBar">
    <property name="windowTitle">
@@ -57,6 +54,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionMove"/>
+   <addaction name="actionDelete"/>
+   <addaction name="actionResize"/>
   </widget>
   <action name="actionSquare">
    <property name="text">
@@ -74,16 +74,28 @@
    </property>
   </action>
   <action name="actionMove">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Move</string>
    </property>
   </action>
   <action name="actionDelete">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Delete</string>
    </property>
   </action>
   <action name="actionResize">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Resize</string>
    </property>

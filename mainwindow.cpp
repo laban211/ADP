@@ -82,12 +82,12 @@ void MainWindow::on_actionMove_triggered()
 {
     _toolset.changeToolset(Toolset::moveMode);
 }
-
+//deleteMode
 void MainWindow::on_actionDelete_triggered()
 {
     _toolset.changeToolset(Toolset::deleteMode);
 }
-
+//resizeMode
 void MainWindow::on_actionResize_triggered()
 {
     _toolset.changeToolset(Toolset::resizeMode);

@@ -5,6 +5,7 @@
 #include <vector>
 #include "shape.h"
 #include "toolset.h"
+#include <QActionGroup>
 
 namespace Ui {
 class MainWindow;
