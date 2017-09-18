@@ -32,6 +32,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    //Testing
+    Toolset toolset(Toolset::moveMode);
 }
 
 MainWindow::~MainWindow()
@@ -71,4 +74,21 @@ void MainWindow::on_actionTriangle_triggered()
     Shape triangle(Shape::triangle, QRect(100,100,100,100), 3, Qt::white, Qt::black);
     _shapeFromIndex.push_back(triangle);
     update();
+}
+
+//selecting toolset
+//moveMode
+void MainWindow::on_actionMove_triggered()
+{
+    _toolset.changeToolset(Toolset::moveMode);
+}
+
+void MainWindow::on_actionDelete_triggered()
+{
+    _toolset.changeToolset(Toolset::deleteMode);
+}
+
+void MainWindow::on_actionResize_triggered()
+{
+    _toolset.changeToolset(Toolset::resizeMode);
 }

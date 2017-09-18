@@ -43,6 +43,9 @@
    <addaction name="actionSquare"/>
    <addaction name="actionCircle"/>
    <addaction name="actionTriangle"/>
+   <addaction name="actionMove"/>
+   <addaction name="actionDelete"/>
+   <addaction name="actionResize"/>
   </widget>
   <widget class="QToolBar" name="rightToolBar">
    <property name="windowTitle">
@@ -68,6 +71,21 @@
   <action name="actionTriangle">
    <property name="text">
     <string>Triangle</string>
+   </property>
+  </action>
+  <action name="actionMove">
+   <property name="text">
+    <string>Move</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="actionResize">
+   <property name="text">
+    <string>Resize</string>
    </property>
   </action>
  </widget>
