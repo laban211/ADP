@@ -3,10 +3,15 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include "shape.h"
+#include <QDebug>
+#include <QFileDialog>
+#include <QImage>
 
 //drawing all 3 shapes
 void MainWindow::drawShape(QPainter &painter, Shape &shape)
 {
+    QPainterPath path;
+
     painter.setBrush(shape._colorFill);
     painter.setPen(QPen(shape._colorBorder, shape._lineWidth));
 
@@ -14,13 +19,14 @@ void MainWindow::drawShape(QPainter &painter, Shape &shape)
         painter.drawEllipse(shape._boundingRect);
     }
     else if(shape._shapetype == Shape::triangle){
-       if(!_shapeMoving){
+
         path.moveTo(shape._boundingRect.left() + (shape._boundingRect.width() / 2), shape._boundingRect.top());
         path.lineTo(shape._boundingRect.bottomRight());
         path.lineTo(shape._boundingRect.bottomLeft());
         path.closeSubpath();
         painter.drawPath(path);
-       }
+
+
     }
     else
     {
@@ -33,6 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint)), this, SLOT(showContextMenu(const QPoint &)));
 }
 
 MainWindow::~MainWindow()
@@ -113,4 +121,55 @@ Shape *MainWindow::shapeClicked(QPoint point)
                     return &_shapeFromIndex[i];
         }
     return nullptr;
+}
+void MainWindow::showContextMenu(const QPoint &point)
+{
+    QMenu menuCreate;
+    menuCreate.setTitle("Shape");
+    QAction *actionCopy = menuCreate.addAction("Copy");
+    QAction *actionPaste = menuCreate.addAction("Paste");
+    QAction *actionDelete = menuCreate.addAction("Delete");
+
+    QMenu menu;
+    menu.addMenu(&menuCreate);
+
+    QPoint positionOfMenu = mapToGlobal(point);
+    QAction *actionChosen = menu.exec(positionOfMenu);
+
+    if(actionChosen == actionDelete){
+        for (int i=_shapeFromIndex.size()-1; i>=0; i-=1){
+                if (containsPoint(_shapeFromIndex[i], point))
+                    _shapeFromIndex.erase(_shapeFromIndex.begin() + i);
+                    update();
+       }
+   }
+    else if(actionChosen == actionCopy){
+
+        for (int i=_shapeFromIndex.size()-1; i>=0; i-=1){
+                if (containsPoint(_shapeFromIndex[i], point))
+                    _shapeCopy = i;
+                    update();
+                    _copiedOnce = true;
+        }
+    }
+    else if(actionChosen == actionPaste && _copiedOnce){
+        _shapeFromIndex.push_back(_shapeFromIndex[_shapeCopy]);
+        update();
+    }
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+
+
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    /*
+    QString imagePath = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("JPEG (*.jpg *.jpeg);;PNG (*.png)"));
+    _imageObject = new QImage;
+    _imageObject->load(imagePath);
+    image = QPixmap::fromImage(*_imageObject);
+    scene = new*/
 }

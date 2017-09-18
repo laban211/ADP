@@ -31,7 +31,15 @@
     <addaction name="actionCircle"/>
     <addaction name="actionTriangle"/>
    </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+   </widget>
    <addaction name="menuSquare"/>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QToolBar" name="leftToolBar">
    <attribute name="toolBarArea">
@@ -68,6 +76,16 @@
   <action name="actionTriangle">
    <property name="text">
     <string>Triangle</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
    </property>
   </action>
  </widget>
