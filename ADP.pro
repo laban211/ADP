@@ -24,10 +24,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    maindrawingwidget.cpp
 
 HEADERS  += mainwindow.h \
-    shape.h
+    shape.h \
+    maindrawingwidget.h
 
 FORMS    += mainwindow.ui
 
