@@ -5,6 +5,7 @@
 #include "maindrawingwidget.h"
 #include "shape.h"
 #include <QPushButton>
+#include "toolset.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,12 +29,19 @@ private slots:
      void on_actionColorpicker_triggered();
      void on_actionBorderColor_triggered();
 
+     void on_actionMove_triggered();
+
+     void on_actionResize_triggered();
+
+private:
+     Toolset _toolset;
+
 protected:
      QString _colorShapeBoxColor;
      QString _colorBorderBoxColor;
      QColor _currentShapeColor = Qt::white;
      QColor _currentBorderColor = Qt::black;
-;
+
 
      QPushButton *colorShapeBox;
      QPushButton *colorBorderBox;

@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+        Toolset toolset(Toolset::moveMode);
         //Creates Shape Color box
         colorShapeBox = new QPushButton(this);
         ui->rightToolBar->addWidget(colorShapeBox);
@@ -109,4 +110,14 @@ void MainWindow::on_actionBorderColor_triggered()
     colorBorderBox->setStyleSheet(_colorBorderBoxColor);
     }
 
+}
+
+void MainWindow::on_actionMove_triggered()
+{
+    _toolset.changeToolset(Toolset::moveMode);
+}
+
+void MainWindow::on_actionResize_triggered()
+{
+    _toolset.changeToolset(Toolset::resizeMode);
 }

@@ -24,7 +24,6 @@ void MainDrawingWidget::drawShape(QPainter &painter, Shape &shape)
         painter.drawEllipse(shape._boundingRect);
     }
     else if(shape._shapetype == Shape::triangle){
-
         path.moveTo(shape._boundingRect.left() + (shape._boundingRect.width() / 2), shape._boundingRect.top());
         path.lineTo(shape._boundingRect.bottomRight());
         path.lineTo(shape._boundingRect.bottomLeft());
