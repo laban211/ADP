@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "maindrawingwidget.h"
 #include "shape.h"
+#include <QPushButton>
 
 namespace Ui {
 class MainWindow;
@@ -24,6 +25,19 @@ private slots:
      void on_actionTriangle_triggered();
      void on_actionSave_triggered();
      void on_actionOpen_triggered();
+     void on_actionColorpicker_triggered();
+     void on_actionBorderColor_triggered();
+
+protected:
+     QString _colorShapeBoxColor;
+     QString _colorBorderBoxColor;
+     QColor _currentShapeColor = Qt::white;
+     QColor _currentBorderColor = Qt::black;
+;
+
+     QPushButton *colorShapeBox;
+     QPushButton *colorBorderBox;
+
 };
 
 #endif // MAINWINDOW_H
