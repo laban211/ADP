@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <QPushButton>
 #include <QColor>
+#include <QModelIndex>
 
 
 
@@ -101,10 +102,15 @@ void MainWindow::on_actionTriangle_triggered()
 
 void MainWindow::on_actionColorpicker_triggered()
 {
-    currentShapeColor = QColorDialog::getColor();
+
+    QColor colorShapeTest = QColorDialog::getColor();
+
+    if(colorShapeTest.isValid()){
+
+    currentShapeColor = colorShapeTest;
     colorShapeBoxColor = QString("background-color: %1").arg(currentShapeColor.name());
     colorShapeBox->setStyleSheet(colorShapeBoxColor);
-
+    }
 }
 
 
@@ -112,9 +118,12 @@ void MainWindow::on_actionColorpicker_triggered()
 
 void MainWindow::on_actionBorderColor_triggered()
 {
-    currentBorderColor = QColorDialog::getColor();
+    QColor colorBorderTest = QColorDialog::getColor();
+
+    if(colorBorderTest.isValid()){
+    currentBorderColor = colorBorderTest;
     colorBorderBoxColor = QString("background-color: %1").arg(currentBorderColor.name());
     colorBorderBox->setStyleSheet(colorBorderBoxColor);
-
+    }
 
 }

@@ -9,6 +9,7 @@
 #include <QPushButton>
 
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -19,6 +20,7 @@ class MainWindow : public QMainWindow
 
     void drawShape(QPainter &painter, Shape &shape);
     QPainterPath path;
+
 
 public:
     explicit MainWindow(QWidget *parent = 0);
