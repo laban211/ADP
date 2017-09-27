@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "maindrawingwidget.h"
-#include <QDebug>
 #include "shape.h"
 #include <QFileDialog>
 #include <QPainter>
@@ -13,6 +12,8 @@
 #include <QPushButton>
 
 extern std::vector<Shape> _shapeFromIndex;
+
+extern Toolset myToolset;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -33,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(colorBorderBox, SIGNAL(clicked()), this, SLOT(on_actionBorderColor_triggered()));
 
         //Allocate memory for object
-        _toolset = new Toolset;
+        //_toolset = new Toolset;
 
 }
 
@@ -116,10 +117,10 @@ void MainWindow::on_actionBorderColor_triggered()
 
 void MainWindow::on_actionMove_triggered()
 {
-    _toolset->changeToolset(Toolset::moveMode);
+    myToolset.changeToolset(Toolset::moveMode);
 }
 
 void MainWindow::on_actionResize_triggered()
 {
-    _toolset->changeToolset(Toolset::resizeMode);
+    myToolset.changeToolset(Toolset::resizeMode);
 }

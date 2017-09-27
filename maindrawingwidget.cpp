@@ -2,10 +2,11 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include "shape.h"
-#include <QDebug>
 #include <QMenu>
 
 std::vector<Shape> _shapeFromIndex;
+
+Toolset myToolset;
 
 MainDrawingWidget::MainDrawingWidget(QWidget *parent) : QWidget(parent)
 {
@@ -13,9 +14,7 @@ MainDrawingWidget::MainDrawingWidget(QWidget *parent) : QWidget(parent)
     connect(this, SIGNAL(customContextMenuRequested(const QPoint)), this, SLOT(showContextMenu(const QPoint &)));
 
     //Allocate memory for object
-    _toolset = new Toolset;
-
-
+    //_toolset = new Toolset;
 }
 
 void MainDrawingWidget::drawShape(QPainter &painter, Shape &shape)
@@ -54,16 +53,15 @@ void MainDrawingWidget::paintEvent(QPaintEvent *event)
 void MainDrawingWidget::mousePressEvent(QMouseEvent *event)
 {
 
-    if(_toolset->isMove()){
-        qDebug()<<_toolset->_activeToolset;
+
+    if(myToolset.isMove()){
         _shapeMoving = shapeClicked(event->pos());
         if (_shapeMoving){
             _positionOfShapeWhenClicked = _shapeMoving->_boundingRect.topLeft();
             _positionOfMouseWhenClicked = event->pos();
         }
     }
-    else if(_toolset->isResize()){
-        qDebug()<<"we're here!";
+    else if(myToolset.isResize()){
         _shapeResizing = shapeClicked(event->pos());
         if(_shapeResizing){
             _positionOfShapeWhenClicked = _shapeResizing->_boundingRect.topLeft();
@@ -74,7 +72,7 @@ void MainDrawingWidget::mousePressEvent(QMouseEvent *event)
 
 void MainDrawingWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if(_toolset->isMove()){
+    if(myToolset.isMove()){
         if(_shapeMoving){
             QPoint positionOfMouseNow = event->pos();
             QPoint displacement = positionOfMouseNow - _positionOfMouseWhenClicked;
@@ -84,7 +82,7 @@ void MainDrawingWidget::mouseMoveEvent(QMouseEvent *event)
             update();
         }
     }
-    else if(_toolset->isResize()){
+    else if(myToolset.isResize()){
         if(_shapeResizing){
             QPoint positionOfMouseNow = event->pos();
             _shapeResizing->_boundingRect.setBottomRight(positionOfMouseNow);
@@ -95,10 +93,10 @@ void MainDrawingWidget::mouseMoveEvent(QMouseEvent *event)
 
 void MainDrawingWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(_toolset->isMove()){
+    if(myToolset.isMove()){
         _shapeMoving = nullptr;
     }
-    else if(_toolset->isResize()){
+    else if(myToolset.isResize()){
         _shapeResizing = nullptr;
     }
 }

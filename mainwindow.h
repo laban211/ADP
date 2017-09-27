@@ -21,7 +21,6 @@ public:
      Ui::MainWindow *ui;
 
 
-
 private slots:
      void on_actionSquare_triggered();
      void on_actionCircle_triggered();
@@ -35,7 +34,6 @@ private slots:
 
      void on_actionResize_triggered();
 protected:
-     Toolset *_toolset;
 
      QString _colorShapeBoxColor;
      QString _colorBorderBoxColor;
