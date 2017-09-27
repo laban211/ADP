@@ -37,8 +37,8 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
-    <addaction name="actionSave_Image_Data"/>
     <addaction name="actionOpen_Image_Data"/>
+    <addaction name="actionSave_Image_Data"/>
    </widget>
    <addaction name="menuSquare"/>
    <addaction name="menuFile"/>

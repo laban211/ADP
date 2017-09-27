@@ -18,7 +18,7 @@ extern QString _colorBorderBoxColor;
 extern QPushButton *colorShapeBox;
 extern QPushButton *colorBorderBox;
 extern QPushButton *borderSizeBox;
-
+Toolset myToolset;
 
 MainDrawingWidget::MainDrawingWidget(QWidget *parent) : QWidget(parent)
 {
@@ -26,7 +26,6 @@ MainDrawingWidget::MainDrawingWidget(QWidget *parent) : QWidget(parent)
     connect(this, SIGNAL(customContextMenuRequested(const QPoint)), this, SLOT(showContextMenu(const QPoint &)));
     setAttribute(Qt::WA_StaticContents);
     _drawing = false;
-    _toolset = new Toolset;
 
 }
 
@@ -99,13 +98,13 @@ void MainDrawingWidget::paintEvent(QPaintEvent *event)
 
 void MainDrawingWidget::mousePressEvent(QMouseEvent *event)
 {
-  if(_toolset->isMove()){
+  if(myToolset.isMove()){
        _shapeMoving = shapeClicked(event->pos());
     if (_shapeMoving){
         _positionOfShapeWhenClicked = _shapeMoving->_boundingRect.topLeft();
         _positionOfMouseWhenClicked = event->pos();
     }
-  }else if(_toolset->isResize()){
+  }else if(myToolset.isResize()){
       _shapeResizing = shapeClicked(event->pos());
       if(_shapeResizing){
                   _positionOfShapeWhenClicked = _shapeResizing->_boundingRect.topLeft();
@@ -123,7 +122,7 @@ void MainDrawingWidget::mousePressEvent(QMouseEvent *event)
 
 void MainDrawingWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if(_toolset->isMove()){
+    if(myToolset.isMove()){
         if(_shapeMoving){
             QPoint positionOfMouseNow = event->pos();
             QPoint displacement = positionOfMouseNow - _positionOfMouseWhenClicked;
@@ -133,7 +132,7 @@ void MainDrawingWidget::mouseMoveEvent(QMouseEvent *event)
             update();
         }
     }
-    if(_toolset->isResize()){
+    else if(myToolset.isResize()){
         if(_shapeResizing){
         QPoint positionOfMouseNow = event->pos();
                     _shapeResizing->_boundingRect.setBottomRight(positionOfMouseNow);
@@ -152,10 +151,10 @@ void MainDrawingWidget::mouseReleaseEvent(QMouseEvent *event)
             drawLineTo(event->pos());
             _drawing = false;
         }
-    if(_toolset->isMove()){
+    if(myToolset.isMove()){
             _shapeMoving = nullptr;
         }
-    else if(_toolset->isResize()){
+    else if(myToolset.isResize()){
             _shapeResizing = nullptr;
     }
 }

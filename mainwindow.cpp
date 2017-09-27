@@ -14,6 +14,7 @@
 #include <QInputDialog>
 
 extern std::vector<Shape> _shapeFromIndex;
+extern Toolset myToolset;
 bool _penButtonChecked;
 bool _eraseButtonChecked;
 QColor _currentShapeColor = Qt::white;
@@ -32,12 +33,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     createButtons();
-    _toolset = new Toolset;
 
-    connect(colorShapeBox, SIGNAL(clicked()), this, SLOT(on_actionColorpicker_triggered()));
-    connect(colorBorderBox, SIGNAL(clicked()), this, SLOT(on_actionBorderColor_triggered()));
-    connect(eraseButton, SIGNAL(clicked()), this, SLOT(on_eraseButton_clicked()));
-    connect(borderSizeBox, SIGNAL(clicked()), this, SLOT(on_actionBorderSize_triggered()));
+
+
 
     mainDrawingWidget = new MainDrawingWidget;
     setCentralWidget(mainDrawingWidget);
@@ -53,6 +51,8 @@ void MainWindow::createButtons(){
     shapeColorLabel = new QLabel(this);
     ui->rightToolBar->addWidget(shapeColorLabel);
     shapeColorLabel->setText("Shape Color:");
+
+
 
     colorShapeBox = new QPushButton(this);
     ui->rightToolBar->addWidget(colorShapeBox);
@@ -85,14 +85,27 @@ void MainWindow::createButtons(){
 
     penButton = new QPushButton(this);
     ui->leftToolBar->addWidget(penButton);
-    penButton->setText("Pen");
     penButton->setCheckable(true);
-    connect(penButton, SIGNAL(clicked()), this, SLOT(on_penButton_clicked()));
+    QPixmap pixPen(":/new/Resources/resource/pen.png");
+    QIcon penIcon(pixPen);
+    penButton->setIcon(penIcon);
+    penButton->setIconSize(QSize(32, 32));
+
 
     eraseButton = new QPushButton(this);
     ui->leftToolBar->addWidget(eraseButton);
-    eraseButton->setText("Erase");
     eraseButton->setCheckable(true);
+    QPixmap pixEraser(":/new/Resources/resource/eraser.png");
+    QIcon eraserIcon(pixEraser);
+    eraseButton->setIcon(eraserIcon);
+    eraseButton->setIconSize(QSize(32, 32));
+
+    connect(colorShapeBox, SIGNAL(clicked()), this, SLOT(on_actionColorpicker_triggered()));
+    connect(colorBorderBox, SIGNAL(clicked()), this, SLOT(on_actionBorderColor_triggered()));
+    connect(penButton, SIGNAL(clicked()), this, SLOT(on_penButton_clicked()));
+    connect(eraseButton, SIGNAL(clicked()), this, SLOT(on_eraseButton_clicked()));
+    connect(borderSizeBox, SIGNAL(clicked()), this, SLOT(on_actionBorderSize_triggered()));
+
 }
 
 void MainWindow::on_actionSquare_triggered()
@@ -196,12 +209,12 @@ void MainWindow::on_eraseButton_clicked()
 
 void MainWindow::on_actionMove_triggered()
 {
-    _toolset->changeToolset(Toolset::moveMode);
+    myToolset.changeToolset(Toolset::moveMode);
 }
 
 void MainWindow::on_actionResize_triggered()
 {
-    _toolset->changeToolset(Toolset::resizeMode);
+    myToolset.changeToolset(Toolset::resizeMode);
 }
 
 void MainWindow::on_actionSave_Image_Data_triggered()

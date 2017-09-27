@@ -39,7 +39,6 @@ private:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
-    Toolset *_toolset;
 
 private slots:
 

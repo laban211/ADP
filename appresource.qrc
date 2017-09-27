@@ -7,5 +7,7 @@
         <file>resource/resize.png</file>
         <file>resource/square.png</file>
         <file>resource/triangle.png</file>
+        <file>resource/pen.png</file>
+        <file>resource/eraser.png</file>
     </qresource>
 </RCC>

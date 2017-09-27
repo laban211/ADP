@@ -3,21 +3,16 @@
 void *Toolset::changeToolset(const ActiveToolset &activeToolset)
 {
     if(activeToolset == moveMode){
-        qDebug()<<"MoveMode active!";
-        this->_activeToolset = activeToolset;
-        qDebug()<<_activeToolset;
-    }
+             this->_activeToolset = activeToolset;
+         }
 
     else if(activeToolset == resizeMode){
-        qDebug()<<"ResizeMode active!";
-        this->_activeToolset = activeToolset;
-        qDebug()<<_activeToolset;
-    }
+             this->_activeToolset = activeToolset;
+         }
 }
 
 bool Toolset::isMove()
 {
-
     return (this->_activeToolset == moveMode);
 }
 

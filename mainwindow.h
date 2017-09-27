@@ -43,7 +43,6 @@ private slots:
      void on_actionOpen_Image_Data_triggered();
 
 private:
-     Toolset *_toolset;
      MainDrawingWidget *mainDrawingWidget;
 
 protected:
