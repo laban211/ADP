@@ -41,9 +41,7 @@ private slots:
      void on_eraseButton_clicked();
      void on_actionSave_Image_Data_triggered();
      void on_actionOpen_Image_Data_triggered();
-
      void on_actionColorfill_triggered();
-
      void on_actionPipett_triggered();
 
 private:

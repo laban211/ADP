@@ -19,7 +19,7 @@ public:
     bool isColorFill();
     bool isPipett();
 
-    ~Toolset();
+
 
 //protected:
 
