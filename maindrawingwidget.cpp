@@ -14,9 +14,8 @@ MainDrawingWidget::MainDrawingWidget(QWidget *parent) : QWidget(parent)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint)), this, SLOT(showContextMenu(const QPoint &)));
-    //ny
     setAttribute(Qt::WA_StaticContents);
-    scribbling = false;
+    _drawing = false;
 }
 
 bool MainDrawingWidget::openImage(const QString &fileName)
@@ -28,7 +27,7 @@ bool MainDrawingWidget::openImage(const QString &fileName)
 
     QSize newSize = loadedImage.size().expandedTo(size());
     resizeImage(&loadedImage, newSize);
-    image = loadedImage;
+    _img = loadedImage;
     update();
     return true;
 }
@@ -57,13 +56,12 @@ void MainDrawingWidget::drawShape(QPainter &painter, Shape &shape)
 
 void MainDrawingWidget::drawLineTo(const QPoint &endPoint)
 {
-    QPainter painter(&image);
-    painter.setPen(QPen(myPenColor, myPenWidth, Qt::SolidLine, Qt::RoundCap,Qt::RoundJoin));
-    painter.drawLine(lastPoint, endPoint);
-    modified = true;
-    int rad = (myPenWidth / 2) + 2;
-    update(QRect(lastPoint, endPoint).normalized().adjusted(-rad, -rad, +rad, +rad));
-    lastPoint = endPoint;
+    QPainter painter(&_img);
+    painter.setPen(QPen(_myPenColor, _myPenWidth, Qt::SolidLine, Qt::RoundCap,Qt::RoundJoin));
+    painter.drawLine(_lastDrawingPoint, endPoint);
+    int rad = (_myPenWidth / 2) + 2;
+    update(QRect(_lastDrawingPoint, endPoint).normalized().adjusted(-rad, -rad, +rad, +rad));
+    _lastDrawingPoint = endPoint;
 }
 
 void MainDrawingWidget::paintEvent(QPaintEvent *event)
@@ -72,14 +70,14 @@ void MainDrawingWidget::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.fillRect(event->rect(), Qt::white);
     QRect dirtyRect = event->rect();
-    painter.drawImage(dirtyRect, image, dirtyRect);
+    painter.drawImage(dirtyRect, _img, dirtyRect);
 
     if(_penButtonChecked){
-        myPenWidth = 5;
-        myPenColor = Qt::black;
+        _myPenWidth = 5;
+        _myPenColor = Qt::black;
     }else if(_eraseButtonChecked){
-        myPenWidth = 20;
-        myPenColor = Qt::white;
+        _myPenWidth = 20;
+        _myPenColor = Qt::white;
     }
     for(Shape &shape : _shapeFromIndex){
         drawShape(painter, shape);
@@ -96,8 +94,8 @@ void MainDrawingWidget::mousePressEvent(QMouseEvent *event)
         _positionOfMouseWhenClicked = event->pos();
     }
     if (event->button() == Qt::LeftButton && _penButtonChecked || _eraseButtonChecked) {
-            lastPoint = event->pos();
-            scribbling = true;
+            _lastDrawingPoint = event->pos();
+            _drawing = true;
         }
 }
 
@@ -112,7 +110,7 @@ void MainDrawingWidget::mouseMoveEvent(QMouseEvent *event)
         update();
     }
 
-    if ((event->buttons() & Qt::LeftButton) && scribbling)
+    if ((event->buttons() & Qt::LeftButton) && _drawing)
             drawLineTo(event->pos());
 
 }
@@ -121,9 +119,9 @@ void MainDrawingWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     _shapeMoving = nullptr;
 
-    if (event->button() == Qt::LeftButton && scribbling) {
+    if (event->button() == Qt::LeftButton && _drawing) {
             drawLineTo(event->pos());
-            scribbling = false;
+            _drawing = false;
         }
 }
 
@@ -192,10 +190,10 @@ void MainDrawingWidget::resizeImage(QImage *image, const QSize &newSize)
 
 void MainDrawingWidget::resizeEvent(QResizeEvent *event)
 {
-    if (width() > image.width() || height() > image.height()) {
-            int newWidth = qMax(width() + 160, image.width());
-            int newHeight = qMax(height() + 160, image.height());
-            resizeImage(&image, QSize(newWidth, newHeight));
+    if (width() > _img.width() || height() > _img.height()) {
+            int newWidth = qMax(width() + 160, _img.width());
+            int newHeight = qMax(height() + 160, _img.height());
+            resizeImage(&_img, QSize(newWidth, newHeight));
             update();
         }
         QWidget::resizeEvent(event);

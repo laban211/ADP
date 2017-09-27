@@ -31,12 +31,9 @@ private slots:
      void on_actionBorderColor_triggered();
      void on_penButton_clicked();
      void on_actionMove_triggered();
-
      void on_actionResize_triggered();
      void on_eraseButton_clicked();
-
      void on_actionSave_Image_Data_triggered();
-
      void on_actionOpen_Image_Data_triggered();
 
 private:

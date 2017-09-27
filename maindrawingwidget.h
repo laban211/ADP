@@ -27,12 +27,11 @@ private:
     QPoint _positionOfMouseWhenClicked;
     void drawLineTo(const QPoint &endPoint);
     void resizeImage(QImage *image, const QSize &newSize);
-    bool modified;
-    bool scribbling;
-    int myPenWidth;
-    QColor myPenColor;
-    QImage image;
-    QPoint lastPoint;
+    bool _drawing;
+    int _myPenWidth;
+    QColor _myPenColor;
+    QImage _img;
+    QPoint _lastDrawingPoint;
 
 
 protected:
