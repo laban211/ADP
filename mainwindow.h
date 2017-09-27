@@ -6,6 +6,7 @@
 #include "shape.h"
 #include <QPushButton>
 #include "toolset.h"
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,11 @@ public:
     ~MainWindow();
      Ui::MainWindow *ui;
 
+     QLabel *shapeColorLabel;
+     QLabel *borderColorLabel;
+     QLabel *borderSizeLabel;
+     void createButtons();
+
 private slots:
      void on_actionSquare_triggered();
      void on_actionCircle_triggered();
@@ -28,23 +34,21 @@ private slots:
      void on_actionOpen_triggered();
      void on_actionColorpicker_triggered();
      void on_actionBorderColor_triggered();
+     void on_actionBorderSize_triggered();
+
+
 
      void on_actionMove_triggered();
 
      void on_actionResize_triggered();
 
+     void on_actionColor_fill_triggered();
+
 private:
      Toolset _toolset;
 
 protected:
-     QString _colorShapeBoxColor;
-     QString _colorBorderBoxColor;
-     QColor _currentShapeColor = Qt::white;
-     QColor _currentBorderColor = Qt::black;
 
-
-     QPushButton *colorShapeBox;
-     QPushButton *colorBorderBox;
 
 };
 

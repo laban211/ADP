@@ -5,8 +5,21 @@
 #include "shape.h"
 #include <QDebug>
 #include <QMenu>
+#include "toolset.h"
+#include <QBrush>
+#include <vector>
 
 std::vector<Shape> _shapeFromIndex;
+
+extern QColor _currentShapeColor;
+extern QColor _currentBorderColor;
+extern int _currentBorderSize;
+extern QString _colorShapeBoxColor;
+extern QString _colorBorderBoxColor;
+extern QPushButton *colorShapeBox;
+extern QPushButton *colorBorderBox;
+extern QPushButton *borderSizeBox;
+
 
 MainDrawingWidget::MainDrawingWidget(QWidget *parent) : QWidget(parent)
 {
@@ -49,11 +62,13 @@ void MainDrawingWidget::paintEvent(QPaintEvent *event)
 
 void MainDrawingWidget::mousePressEvent(QMouseEvent *event)
 {
+
    _shapeMoving = shapeClicked(event->pos());
     if (_shapeMoving){
         _positionOfShapeWhenClicked = _shapeMoving->_boundingRect.topLeft();
         _positionOfMouseWhenClicked = event->pos();
     }
+
 }
 
 void MainDrawingWidget::mouseMoveEvent(QMouseEvent *event)
@@ -96,6 +111,9 @@ void MainDrawingWidget::showContextMenu(const QPoint &point)
     QAction *actionCopy = menuCreate.addAction("Copy");
     QAction *actionPaste = menuCreate.addAction("Paste");
     QAction *actionDelete = menuCreate.addAction("Delete");
+    QAction *actionApplyStyle = menuCreate.addAction("Apply style");
+    QAction *actionCopyStyle = menuCreate.addAction("Copy style");
+
     QMenu menu;
     menu.addMenu(&menuCreate);
     QPoint positionOfMenu = mapToGlobal(point);
@@ -122,4 +140,35 @@ void MainDrawingWidget::showContextMenu(const QPoint &point)
         _shapeFromIndex.push_back(shape);
         update();
     }
+    else if(actionChosen == actionApplyStyle){
+        for (int i=_shapeFromIndex.size()-1; i>=0; i-=1){
+                if (containsPoint(_shapeFromIndex[i], point)){
+                 _shapeFromIndex[i]._colorFill = _currentShapeColor;
+                 _shapeFromIndex[i]._colorBorder = _currentBorderColor;
+                 _shapeFromIndex[i]._lineWidth = _currentBorderSize;
+                }
+                update();
+        }
+    }
+    else if(actionChosen == actionCopyStyle){
+            for (int i=_shapeFromIndex.size()-1; i>=0; i-=1){
+                    if (containsPoint(_shapeFromIndex[i], point)){
+
+                        _currentShapeColor = _shapeFromIndex[i]._colorFill;
+                        _currentBorderColor = _shapeFromIndex[i]._colorBorder;
+                        _currentBorderSize = _shapeFromIndex[i]._lineWidth;
+
+                        _colorBorderBoxColor = QString("background-color: %1").arg(_currentBorderColor.name());
+                        colorBorderBox->setStyleSheet(_colorBorderBoxColor);
+
+                        _colorShapeBoxColor = QString("background-color: %1").arg(_currentShapeColor.name());
+                        colorShapeBox->setStyleSheet(_colorShapeBoxColor);
+
+                        QString borderSize = QString::number(_currentBorderSize);
+                        borderSizeBox->setText(borderSize);
+
+                    }
+                    update();
+    }
+}
 }

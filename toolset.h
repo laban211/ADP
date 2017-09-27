@@ -7,7 +7,7 @@ class Toolset
 {
 public:
     enum ActiveToolset{
-    moveMode, deleteMode, resizeMode
+    moveMode, deleteMode, resizeMode, colorFill
     };
 
     Toolset(ActiveToolset activeToolset = moveMode) : _activeToolset(activeToolset){}

@@ -11,27 +11,28 @@
 #include <QColorDialog>
 #include <QColor>
 #include <QPushButton>
+#include <QInputDialog>
 
 extern std::vector<Shape> _shapeFromIndex;
+QColor _currentShapeColor = Qt::white;
+QColor _currentBorderColor = Qt::black;
+int _currentBorderSize = 3;
+QString _colorShapeBoxColor;
+QString _colorBorderBoxColor;
+QPushButton *colorShapeBox;
+QPushButton *colorBorderBox;
+QPushButton *borderSizeBox;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-        Toolset toolset(Toolset::moveMode);
-        //Creates Shape Color box
-        colorShapeBox = new QPushButton(this);
-        ui->rightToolBar->addWidget(colorShapeBox);
-        colorShapeBox->setText("Shape color");
-        //Creates Border Color box
-        colorBorderBox = new QPushButton(this);
-        ui->rightToolBar->addWidget(colorBorderBox);
-        colorBorderBox->setText("Border color");
 
-
+        createButtons();
         connect(colorShapeBox, SIGNAL(clicked()), this, SLOT(on_actionColorpicker_triggered()));
         connect(colorBorderBox, SIGNAL(clicked()), this, SLOT(on_actionBorderColor_triggered()));
+        connect(borderSizeBox, SIGNAL(clicked()), this, SLOT(on_actionBorderSize_triggered()));
 
 }
 
@@ -40,23 +41,59 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::createButtons(){
+    //Creates label above Color shape box
+    shapeColorLabel = new QLabel(this);
+    ui->rightToolBar->addWidget(shapeColorLabel);
+    shapeColorLabel->setText("Shape Color:");
+
+    colorShapeBox = new QPushButton(this);
+    ui->rightToolBar->addWidget(colorShapeBox);
+    colorShapeBox->setMinimumHeight(10);
+    colorShapeBox->setMinimumWidth(32);
+
+    borderColorLabel = new QLabel(this);
+    ui->rightToolBar->addWidget(borderColorLabel);
+    borderColorLabel->setText("Border Color:");
+
+
+    //Creates Border Color box
+    colorBorderBox = new QPushButton(this);
+    ui->rightToolBar->addWidget(colorBorderBox);
+    colorBorderBox->setMinimumHeight(10);
+    colorBorderBox->setMinimumWidth(32);
+
+    borderSizeLabel = new QLabel(this);
+    ui->rightToolBar->addWidget(borderSizeLabel);
+    borderSizeLabel->setText("Border Size:");
+
+
+    //skapar bordersize button
+    borderSizeBox = new QPushButton(this);
+    ui->rightToolBar->addWidget(borderSizeBox);
+    borderSizeBox->setMinimumHeight(10);
+    borderSizeBox->setMinimumWidth(32);
+    QString borderSize = QString::number(_currentBorderSize);
+    borderSizeBox->setText(borderSize);
+}
+
 void MainWindow::on_actionSquare_triggered()
 {
-    Shape square(Shape::rectangle, QRect(100,100,100,100), 3, _currentShapeColor, _currentBorderColor);
+    Shape square(Shape::rectangle, QRect(100,100,100,100), _currentBorderSize, _currentShapeColor, _currentBorderColor);
     _shapeFromIndex.push_back(square);
     update();
 }
 
 void MainWindow::on_actionCircle_triggered()
 {
-    Shape circle(Shape::ellipse, QRect(100,100,100,100), 3, _currentShapeColor, _currentBorderColor);
+    Shape circle(Shape::ellipse, QRect(100,100,100,100), _currentBorderSize, _currentShapeColor, _currentBorderColor);
     _shapeFromIndex.push_back(circle);
     update();
 }
 
 void MainWindow::on_actionTriangle_triggered()
 {
-    Shape triangle(Shape::triangle, QRect(100,100,100,100), 3, _currentShapeColor, _currentBorderColor);
+    Shape triangle(Shape::triangle, QRect(100,100,100,100), _currentBorderSize, _currentShapeColor, _currentBorderColor);
     _shapeFromIndex.push_back(triangle);
     update();
 }
@@ -107,8 +144,23 @@ void MainWindow::on_actionBorderColor_triggered()
     if(colorBorderTest.isValid()){
     _currentBorderColor = colorBorderTest;
     _colorBorderBoxColor = QString("background-color: %1").arg(_currentBorderColor.name());
+
     colorBorderBox->setStyleSheet(_colorBorderBoxColor);
+
     }
+
+}
+
+void MainWindow::on_actionBorderSize_triggered()
+{
+    bool ok;
+    int borderSizeTest = QInputDialog::getInt(this, tr("Border Size"),
+                                              tr(" "), _currentBorderSize, 0, 50, 1, &ok);
+
+    _currentBorderSize = borderSizeTest;
+    QString borderSize = QString::number(_currentBorderSize);
+    borderSizeBox->setText(borderSize);
+
 
 }
 
@@ -120,4 +172,9 @@ void MainWindow::on_actionMove_triggered()
 void MainWindow::on_actionResize_triggered()
 {
     _toolset.changeToolset(Toolset::resizeMode);
+}
+
+void MainWindow::on_actionColor_fill_triggered()
+{
+    _toolset.changeToolset(Toolset::colorFill);
 }

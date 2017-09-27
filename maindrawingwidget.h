@@ -23,9 +23,9 @@ private:
     Shape *_shapeMoving = nullptr;
     QPoint _positionOfShapeWhenClicked;
     QPoint _positionOfMouseWhenClicked;
-
 protected:
     void paintEvent(QPaintEvent *event) override;
+
 
 private slots:
 

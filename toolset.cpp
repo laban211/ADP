@@ -14,5 +14,9 @@ void Toolset::changeToolset(ActiveToolset activeToolset)
         this->_activeToolset = activeToolset;
     }
 
+    else if(activeToolset == ActiveToolset::colorFill){
+        qDebug()<<"ColorFill active!";
+        this->_activeToolset = activeToolset;
+    }
 
 }

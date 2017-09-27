@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>718</width>
+    <width>469</width>
     <height>444</height>
    </rect>
   </property>
@@ -19,18 +19,10 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>718</width>
-     <height>22</height>
+     <width>469</width>
+     <height>20</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuSquare">
-    <property name="title">
-     <string>Shape</string>
-    </property>
-    <addaction name="actionSquare"/>
-    <addaction name="actionCircle"/>
-    <addaction name="actionTriangle"/>
-   </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
@@ -38,7 +30,6 @@
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
    </widget>
-   <addaction name="menuSquare"/>
    <addaction name="menuFile"/>
   </widget>
   <widget class="QToolBar" name="leftToolBar">
@@ -51,6 +42,11 @@
    <addaction name="actionSquare"/>
    <addaction name="actionCircle"/>
    <addaction name="actionTriangle"/>
+   <addaction name="separator"/>
+   <addaction name="actionMove"/>
+   <addaction name="actionResize"/>
+   <addaction name="actionColor_fill"/>
+   <addaction name="actionColor_pipett"/>
   </widget>
   <widget class="QToolBar" name="rightToolBar">
    <property name="windowTitle">
@@ -60,22 +56,34 @@
     <enum>RightToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
-   <addaction name="actionMove"/>
-   <addaction name="actionResize"/>
   </widget>
   <action name="actionSquare">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/buttons/resource/square.png</normaloff>:/new/buttons/resource/square.png</iconset>
+   </property>
    <property name="text">
     <string>Square</string>
    </property>
   </action>
   <action name="actionCircle">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/buttons/resource/cricle.png</normaloff>:/new/buttons/resource/cricle.png</iconset>
+   </property>
    <property name="text">
     <string>Circle</string>
    </property>
   </action>
   <action name="actionTriangle">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/buttons/resource/triangle.png</normaloff>
+     <normalon>resource/triangle.png</normalon>
+     <selectedon>resource/triangle.png</selectedon>:/new/buttons/resource/triangle.png</iconset>
+   </property>
    <property name="text">
     <string>Triangle</string>
    </property>
@@ -101,13 +109,39 @@
    </property>
   </action>
   <action name="actionMove">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/buttons/resource/drag.png</normaloff>:/new/buttons/resource/drag.png</iconset>
+   </property>
    <property name="text">
     <string>Move</string>
    </property>
   </action>
   <action name="actionResize">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/buttons/resource/resize.png</normaloff>:/new/buttons/resource/resize.png</iconset>
+   </property>
    <property name="text">
     <string>Resize</string>
+   </property>
+  </action>
+  <action name="actionColor_fill">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/buttons/resource/paintbrush.png</normaloff>:/new/buttons/resource/paintbrush.png</iconset>
+   </property>
+   <property name="text">
+    <string>Color fill</string>
+   </property>
+  </action>
+  <action name="actionColor_pipett">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/buttons/resource/pipett.png</normaloff>:/new/buttons/resource/pipett.png</iconset>
+   </property>
+   <property name="text">
+    <string>Color pipett</string>
    </property>
   </action>
  </widget>
@@ -120,6 +154,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="appresource.qrc"/>
+ </resources>
  <connections/>
 </ui>
