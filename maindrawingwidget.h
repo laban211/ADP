@@ -6,7 +6,7 @@
 #include <QTimer>
 #include <QGraphicsScene>
 #include "mainwindow.h"
-
+#include "toolset.h"
 
 class MainDrawingWidget : public QWidget
 {
@@ -23,9 +23,11 @@ private:
     Shape *_shapeMoving = nullptr;
     QPoint _positionOfShapeWhenClicked;
     QPoint _positionOfMouseWhenClicked;
+    Shape *_shapeResizing = nullptr;
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    Toolset *_toolset;
 
 private slots:
 

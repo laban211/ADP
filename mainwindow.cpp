@@ -19,7 +19,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-        Toolset toolset(Toolset::moveMode);
         //Creates Shape Color box
         colorShapeBox = new QPushButton(this);
         ui->rightToolBar->addWidget(colorShapeBox);
@@ -32,6 +31,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
         connect(colorShapeBox, SIGNAL(clicked()), this, SLOT(on_actionColorpicker_triggered()));
         connect(colorBorderBox, SIGNAL(clicked()), this, SLOT(on_actionBorderColor_triggered()));
+
+        //Allocate memory for object
+        _toolset = new Toolset;
 
 }
 
@@ -114,10 +116,10 @@ void MainWindow::on_actionBorderColor_triggered()
 
 void MainWindow::on_actionMove_triggered()
 {
-    _toolset.changeToolset(Toolset::moveMode);
+    _toolset->changeToolset(Toolset::moveMode);
 }
 
 void MainWindow::on_actionResize_triggered()
 {
-    _toolset.changeToolset(Toolset::resizeMode);
+    _toolset->changeToolset(Toolset::resizeMode);
 }

@@ -1,5 +1,4 @@
 #include "maindrawingwidget.h"
-#include "mainwindow.h"
 #include <QPainter>
 #include <QPaintEvent>
 #include "shape.h"
@@ -12,6 +11,11 @@ MainDrawingWidget::MainDrawingWidget(QWidget *parent) : QWidget(parent)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint)), this, SLOT(showContextMenu(const QPoint &)));
+
+    //Allocate memory for object
+    _toolset = new Toolset;
+
+
 }
 
 void MainDrawingWidget::drawShape(QPainter &painter, Shape &shape)
@@ -49,28 +53,54 @@ void MainDrawingWidget::paintEvent(QPaintEvent *event)
 
 void MainDrawingWidget::mousePressEvent(QMouseEvent *event)
 {
-   _shapeMoving = shapeClicked(event->pos());
-    if (_shapeMoving){
-        _positionOfShapeWhenClicked = _shapeMoving->_boundingRect.topLeft();
-        _positionOfMouseWhenClicked = event->pos();
+
+    if(_toolset->isMove()){
+        qDebug()<<_toolset->_activeToolset;
+        _shapeMoving = shapeClicked(event->pos());
+        if (_shapeMoving){
+            _positionOfShapeWhenClicked = _shapeMoving->_boundingRect.topLeft();
+            _positionOfMouseWhenClicked = event->pos();
+        }
+    }
+    else if(_toolset->isResize()){
+        qDebug()<<"we're here!";
+        _shapeResizing = shapeClicked(event->pos());
+        if(_shapeResizing){
+            _positionOfShapeWhenClicked = _shapeResizing->_boundingRect.topLeft();
+            _positionOfMouseWhenClicked = event->pos();
+        }
     }
 }
 
 void MainDrawingWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if(_shapeMoving){
-        QPoint positionOfMouseNow = event->pos();
-        QPoint displacement = positionOfMouseNow - _positionOfMouseWhenClicked;
-        QPoint positionOfShapeNow = _positionOfShapeWhenClicked + displacement;
-        QRect newRect(positionOfShapeNow, _shapeMoving->_boundingRect.size());
-        _shapeMoving->_boundingRect = newRect;
-        update();
+    if(_toolset->isMove()){
+        if(_shapeMoving){
+            QPoint positionOfMouseNow = event->pos();
+            QPoint displacement = positionOfMouseNow - _positionOfMouseWhenClicked;
+            QPoint positionOfShapeNow = _positionOfShapeWhenClicked + displacement;
+            QRect newRect(positionOfShapeNow, _shapeMoving->_boundingRect.size());
+            _shapeMoving->_boundingRect = newRect;
+            update();
+        }
+    }
+    else if(_toolset->isResize()){
+        if(_shapeResizing){
+            QPoint positionOfMouseNow = event->pos();
+            _shapeResizing->_boundingRect.setBottomRight(positionOfMouseNow);
+            update();
+        }
     }
 }
 
 void MainDrawingWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    _shapeMoving = nullptr;
+    if(_toolset->isMove()){
+        _shapeMoving = nullptr;
+    }
+    else if(_toolset->isResize()){
+        _shapeResizing = nullptr;
+    }
 }
 
 bool MainDrawingWidget::containsPoint(Shape &shape, QPoint point)
