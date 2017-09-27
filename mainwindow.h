@@ -20,6 +20,8 @@ public:
     ~MainWindow();
      Ui::MainWindow *ui;
 
+
+
 private slots:
      void on_actionSquare_triggered();
      void on_actionCircle_triggered();
@@ -32,11 +34,9 @@ private slots:
      void on_actionMove_triggered();
 
      void on_actionResize_triggered();
-
-private:
-     Toolset _toolset;
-
 protected:
+     Toolset *_toolset;
+
      QString _colorShapeBoxColor;
      QString _colorBorderBoxColor;
      QColor _currentShapeColor = Qt::white;
