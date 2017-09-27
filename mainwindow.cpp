@@ -11,10 +11,19 @@
 #include <QColor>
 #include <QPushButton>
 #include <QDataStream>
+#include <QInputDialog>
 
 extern std::vector<Shape> _shapeFromIndex;
 bool _penButtonChecked;
 bool _eraseButtonChecked;
+QColor _currentShapeColor = Qt::white;
+QColor _currentBorderColor = Qt::black;
+int _currentBorderSize = 3;
+QString _colorShapeBoxColor;
+QString _colorBorderBoxColor;
+QPushButton *colorShapeBox;
+QPushButton *colorBorderBox;
+QPushButton *borderSizeBox;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,18 +31,57 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    Toolset toolset(Toolset::moveMode);
-    //Creates Shape Color box
-    colorShapeBox = new QPushButton(this);
-    ui->rightToolBar->addWidget(colorShapeBox);
-    colorShapeBox->setText("Shape color");
-    //Creates Border Color box
-    colorBorderBox = new QPushButton(this);
-    ui->rightToolBar->addWidget(colorBorderBox);
-    colorBorderBox->setText("Border color");
+    createButtons();
+    _toolset = new Toolset;
 
     connect(colorShapeBox, SIGNAL(clicked()), this, SLOT(on_actionColorpicker_triggered()));
     connect(colorBorderBox, SIGNAL(clicked()), this, SLOT(on_actionBorderColor_triggered()));
+    connect(eraseButton, SIGNAL(clicked()), this, SLOT(on_eraseButton_clicked()));
+    connect(borderSizeBox, SIGNAL(clicked()), this, SLOT(on_actionBorderSize_triggered()));
+
+    mainDrawingWidget = new MainDrawingWidget;
+    setCentralWidget(mainDrawingWidget);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::createButtons(){
+    //Creates label above Color shape box
+    shapeColorLabel = new QLabel(this);
+    ui->rightToolBar->addWidget(shapeColorLabel);
+    shapeColorLabel->setText("Shape Color:");
+
+    colorShapeBox = new QPushButton(this);
+    ui->rightToolBar->addWidget(colorShapeBox);
+    colorShapeBox->setMinimumHeight(10);
+    colorShapeBox->setMinimumWidth(32);
+
+    borderColorLabel = new QLabel(this);
+    ui->rightToolBar->addWidget(borderColorLabel);
+    borderColorLabel->setText("Border Color:");
+
+
+    //Creates Border Color box
+    colorBorderBox = new QPushButton(this);
+    ui->rightToolBar->addWidget(colorBorderBox);
+    colorBorderBox->setMinimumHeight(10);
+    colorBorderBox->setMinimumWidth(32);
+
+    borderSizeLabel = new QLabel(this);
+    ui->rightToolBar->addWidget(borderSizeLabel);
+    borderSizeLabel->setText("Border Size:");
+
+
+    //skapar bordersize button
+    borderSizeBox = new QPushButton(this);
+    ui->rightToolBar->addWidget(borderSizeBox);
+    borderSizeBox->setMinimumHeight(10);
+    borderSizeBox->setMinimumWidth(32);
+    QString borderSize = QString::number(_currentBorderSize);
+    borderSizeBox->setText(borderSize);
 
     penButton = new QPushButton(this);
     ui->leftToolBar->addWidget(penButton);
@@ -45,34 +93,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->leftToolBar->addWidget(eraseButton);
     eraseButton->setText("Erase");
     eraseButton->setCheckable(true);
-    connect(eraseButton, SIGNAL(clicked()), this, SLOT(on_eraseButton_clicked()));
-
-     mainDrawingWidget = new MainDrawingWidget;
-     setCentralWidget(mainDrawingWidget);
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
 }
 
 void MainWindow::on_actionSquare_triggered()
 {
-    Shape square(Shape::rectangle, QRect(100,100,100,100), 3, _currentShapeColor, _currentBorderColor);
+    Shape square(Shape::rectangle, QRect(100,100,100,100), _currentBorderSize, _currentShapeColor, _currentBorderColor);
     _shapeFromIndex.push_back(square);
     update();
 }
 
 void MainWindow::on_actionCircle_triggered()
 {
-    Shape circle(Shape::ellipse, QRect(100,100,100,100), 3, _currentShapeColor, _currentBorderColor);
+    Shape circle(Shape::ellipse, QRect(100,100,100,100), _currentBorderSize, _currentShapeColor, _currentBorderColor);
     _shapeFromIndex.push_back(circle);
     update();
 }
 
 void MainWindow::on_actionTriangle_triggered()
 {
-    Shape triangle(Shape::triangle, QRect(100,100,100,100), 3, _currentShapeColor, _currentBorderColor);
+    Shape triangle(Shape::triangle, QRect(100,100,100,100), _currentBorderSize, _currentShapeColor, _currentBorderColor);
     _shapeFromIndex.push_back(triangle);
     update();
 }
@@ -121,6 +160,18 @@ void MainWindow::on_actionBorderColor_triggered()
 
 }
 
+void MainWindow::on_actionBorderSize_triggered()
+{
+    bool ok;
+    int borderSizeTest = QInputDialog::getInt(this, tr("Border Size"),
+                                              tr(" "), _currentBorderSize, 0, 50, 1, &ok);
+
+    _currentBorderSize = borderSizeTest;
+    QString borderSize = QString::number(_currentBorderSize);
+    borderSizeBox->setText(borderSize);
+
+}
+
 void MainWindow::on_penButton_clicked()
 {
     if(penButton->isChecked()){
@@ -145,12 +196,12 @@ void MainWindow::on_eraseButton_clicked()
 
 void MainWindow::on_actionMove_triggered()
 {
-    _toolset.changeToolset(Toolset::moveMode);
+    _toolset->changeToolset(Toolset::moveMode);
 }
 
 void MainWindow::on_actionResize_triggered()
 {
-    _toolset.changeToolset(Toolset::resizeMode);
+    _toolset->changeToolset(Toolset::resizeMode);
 }
 
 void MainWindow::on_actionSave_Image_Data_triggered()

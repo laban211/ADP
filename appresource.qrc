@@ -1,1 +1,11 @@
-<RCC/>
+<RCC>
+    <qresource prefix="/new/Resources">
+        <file>resource/cricle.png</file>
+        <file>resource/drag.png</file>
+        <file>resource/paintbrush.png</file>
+        <file>resource/pipett.png</file>
+        <file>resource/resize.png</file>
+        <file>resource/square.png</file>
+        <file>resource/triangle.png</file>
+    </qresource>
+</RCC>

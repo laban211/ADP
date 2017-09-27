@@ -6,6 +6,7 @@
 #include "shape.h"
 #include <QTimer>
 #include <QGraphicsScene>
+#include "toolset.h"
 
 class MainDrawingWidget : public QWidget
 {
@@ -32,11 +33,13 @@ private:
     QColor _myPenColor;
     QImage _img;
     QPoint _lastDrawingPoint;
+    Shape *_shapeResizing = nullptr;
 
 
 protected:
     void paintEvent(QPaintEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
+    Toolset *_toolset;
 
 private slots:
 

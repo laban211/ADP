@@ -53,6 +53,10 @@
    <addaction name="actionSquare"/>
    <addaction name="actionCircle"/>
    <addaction name="actionTriangle"/>
+   <addaction name="separator"/>
+   <addaction name="actionMove"/>
+   <addaction name="actionResize"/>
+   <addaction name="separator"/>
   </widget>
   <widget class="QToolBar" name="rightToolBar">
    <property name="windowTitle">
@@ -64,20 +68,30 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionMove"/>
-   <addaction name="actionResize"/>
   </widget>
   <action name="actionSquare">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/Resources/resource/square.png</normaloff>:/new/Resources/resource/square.png</iconset>
+   </property>
    <property name="text">
     <string>Square</string>
    </property>
   </action>
   <action name="actionCircle">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/Resources/resource/cricle.png</normaloff>:/new/Resources/resource/cricle.png</iconset>
+   </property>
    <property name="text">
     <string>Circle</string>
    </property>
   </action>
   <action name="actionTriangle">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/Resources/resource/triangle.png</normaloff>:/new/Resources/resource/triangle.png</iconset>
+   </property>
    <property name="text">
     <string>Triangle</string>
    </property>
@@ -93,11 +107,19 @@
    </property>
   </action>
   <action name="actionMove">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/Resources/resource/drag.png</normaloff>:/new/Resources/resource/drag.png</iconset>
+   </property>
    <property name="text">
     <string>Move</string>
    </property>
   </action>
   <action name="actionResize">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/Resources/resource/resize.png</normaloff>:/new/Resources/resource/resize.png</iconset>
+   </property>
    <property name="text">
     <string>Resize</string>
    </property>
@@ -122,6 +144,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="appresource.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include "toolset.h"
 #include <QResizeEvent>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
      Ui::MainWindow *ui;
+     void createButtons();
+     QLabel *shapeColorLabel;
+     QLabel *borderColorLabel;
+     QLabel *borderSizeLabel;
 
 private slots:
      void on_actionSquare_triggered();
@@ -29,6 +34,7 @@ private slots:
      void on_actionOpen_triggered();
      void on_actionColorpicker_triggered();
      void on_actionBorderColor_triggered();
+     void on_actionBorderSize_triggered();
      void on_penButton_clicked();
      void on_actionMove_triggered();
      void on_actionResize_triggered();
@@ -37,16 +43,10 @@ private slots:
      void on_actionOpen_Image_Data_triggered();
 
 private:
-     Toolset _toolset;
+     Toolset *_toolset;
      MainDrawingWidget *mainDrawingWidget;
 
 protected:
-     QString _colorShapeBoxColor;
-     QString _colorBorderBoxColor;
-     QColor _currentShapeColor = Qt::white;
-     QColor _currentBorderColor = Qt::black;
-     QPushButton *colorShapeBox;
-     QPushButton *colorBorderBox;
      QPushButton *penButton;
      QPushButton *eraseButton;
 

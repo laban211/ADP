@@ -10,11 +10,15 @@ public:
     moveMode, deleteMode, resizeMode
     };
 
-    Toolset(ActiveToolset activeToolset = moveMode) : _activeToolset(activeToolset){}
+    Toolset(ActiveToolset activeToolset = resizeMode) : _activeToolset(activeToolset){}
 
-//    Toolset();
+    void *changeToolset(const ActiveToolset &activeToolset);
 
-    void changeToolset(ActiveToolset activeToolset);
+    bool isMove();
+
+    bool isResize();
+
+    ~Toolset();
 
 //protected:
 

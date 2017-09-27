@@ -1,16 +1,32 @@
 #include "toolset.h"
 
-void Toolset::changeToolset(ActiveToolset activeToolset)
+void *Toolset::changeToolset(const ActiveToolset &activeToolset)
 {
-    //You can also use a switch-case here
-
-    if(activeToolset == ActiveToolset::moveMode){
+    if(activeToolset == moveMode){
         qDebug()<<"MoveMode active!";
         this->_activeToolset = activeToolset;
+        qDebug()<<_activeToolset;
     }
 
-    else if(activeToolset == ActiveToolset::resizeMode){
+    else if(activeToolset == resizeMode){
         qDebug()<<"ResizeMode active!";
         this->_activeToolset = activeToolset;
+        qDebug()<<_activeToolset;
     }
+}
+
+bool Toolset::isMove()
+{
+
+    return (this->_activeToolset == moveMode);
+}
+
+bool Toolset::isResize()
+{
+    return (this->_activeToolset == resizeMode);
+}
+
+Toolset::~Toolset()
+{
+    delete this;
 }
