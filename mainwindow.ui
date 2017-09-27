@@ -37,6 +37,8 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
+    <addaction name="actionSave_Image_Data"/>
+    <addaction name="actionOpen_Image_Data"/>
    </widget>
    <addaction name="menuSquare"/>
    <addaction name="menuFile"/>
@@ -90,16 +92,6 @@
     <string>Open Image</string>
    </property>
   </action>
-  <action name="actionOpen_Image_Data">
-   <property name="text">
-    <string>Open Image Data</string>
-   </property>
-  </action>
-  <action name="actionSave_Image_Data">
-   <property name="text">
-    <string>Save Image Data</string>
-   </property>
-  </action>
   <action name="actionMove">
    <property name="text">
     <string>Move</string>
@@ -108,6 +100,16 @@
   <action name="actionResize">
    <property name="text">
     <string>Resize</string>
+   </property>
+  </action>
+  <action name="actionSave_Image_Data">
+   <property name="text">
+    <string>Save Image Data</string>
+   </property>
+  </action>
+  <action name="actionOpen_Image_Data">
+   <property name="text">
+    <string>Open Image Data</string>
    </property>
   </action>
  </widget>

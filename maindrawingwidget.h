@@ -1,12 +1,11 @@
 #ifndef MAINDRAWINGWIDGET_H
 #define MAINDRAWINGWIDGET_H
+
 #include <QWidget>
 #include <vector>
 #include "shape.h"
 #include <QTimer>
 #include <QGraphicsScene>
-#include "mainwindow.h"
-
 
 class MainDrawingWidget : public QWidget
 {
@@ -14,6 +13,9 @@ class MainDrawingWidget : public QWidget
 
 public:
     explicit MainDrawingWidget(QWidget *parent = nullptr);
+    bool openImage(const QString &fileName);
+    void setPenColor(const QColor &newColor);
+    void setPenWidth(int newWidth);
 
 private:
     int _shapeCopy;
@@ -23,9 +25,19 @@ private:
     Shape *_shapeMoving = nullptr;
     QPoint _positionOfShapeWhenClicked;
     QPoint _positionOfMouseWhenClicked;
+    void drawLineTo(const QPoint &endPoint);
+    void resizeImage(QImage *image, const QSize &newSize);
+    bool modified;
+    bool scribbling;
+    int myPenWidth;
+    QColor myPenColor;
+    QImage image;
+    QPoint lastPoint;
+
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
 

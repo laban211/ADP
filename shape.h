@@ -2,10 +2,18 @@
 #define SHAPE_H
 
 #include <QWidget>
+#include <QCoreApplication>
+#include <QFile>
+#include <QDataStream>
+#include <QString>
+#include <QDebug>
+#include <QRect>
+#include <QColor>
 
 class Shape
 {
 public:
+    Shape(){}
     enum Shapetype{
         ellipse, rectangle, triangle
     };
@@ -22,6 +30,20 @@ public:
     int _lineWidth;
     QColor _colorFill;
     QColor _colorBorder;
+
+    friend QDataStream &operator<<(QDataStream &ds, Shape &shape);
+    friend QDataStream &operator>>(QDataStream &ds, Shape &shape);
 };
 
+inline QDataStream &operator>>(QDataStream &ds, Shape &shape)
+{
+    return ds >> shape._boundingRect >> shape._colorBorder >> shape._colorFill >> shape._lineWidth >> ((qint32&)shape._shapetype);
+}
+
+inline QDataStream &operator<<(QDataStream &ds, Shape &shape)
+{
+    return ds << shape._boundingRect << shape._colorBorder << shape._colorFill << shape._lineWidth << shape._shapetype;
+}
 #endif // SHAPE_H
+
+

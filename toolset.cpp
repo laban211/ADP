@@ -13,6 +13,4 @@ void Toolset::changeToolset(ActiveToolset activeToolset)
         qDebug()<<"ResizeMode active!";
         this->_activeToolset = activeToolset;
     }
-
-
 }
