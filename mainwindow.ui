@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>718</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSquare">
@@ -56,6 +56,8 @@
    <addaction name="separator"/>
    <addaction name="actionMove"/>
    <addaction name="actionResize"/>
+   <addaction name="actionColorfill"/>
+   <addaction name="actionPipett"/>
    <addaction name="separator"/>
   </widget>
   <widget class="QToolBar" name="rightToolBar">
@@ -132,6 +134,24 @@
   <action name="actionOpen_Image_Data">
    <property name="text">
     <string>Open Image Data</string>
+   </property>
+  </action>
+  <action name="actionColorfill">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/Resources/resource/paintbrush.png</normaloff>:/new/Resources/resource/paintbrush.png</iconset>
+   </property>
+   <property name="text">
+    <string>Colorfill</string>
+   </property>
+  </action>
+  <action name="actionPipett">
+   <property name="icon">
+    <iconset resource="appresource.qrc">
+     <normaloff>:/new/Resources/resource/pipett.png</normaloff>:/new/Resources/resource/pipett.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pipett</string>
    </property>
   </action>
  </widget>

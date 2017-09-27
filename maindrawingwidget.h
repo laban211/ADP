@@ -34,6 +34,7 @@ private:
     QImage _img;
     QPoint _lastDrawingPoint;
     Shape *_shapeResizing = nullptr;
+    Shape *_shapeTheme;
 
 
 protected:

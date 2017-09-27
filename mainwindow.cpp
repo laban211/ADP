@@ -217,6 +217,17 @@ void MainWindow::on_actionResize_triggered()
     myToolset.changeToolset(Toolset::resizeMode);
 }
 
+void MainWindow::on_actionColorfill_triggered()
+{
+    myToolset.changeToolset(Toolset::colorFillMode);
+}
+
+void MainWindow::on_actionPipett_triggered()
+{
+    myToolset.changeToolset(Toolset::pipettMode);
+
+}
+
 void MainWindow::on_actionSave_Image_Data_triggered()
 {
     QString fileN = QFileDialog::getSaveFileName(this, tr("Save image data"), "", tr("TXT file (*.txt)"));
@@ -259,3 +270,5 @@ void MainWindow::on_actionOpen_Image_Data_triggered()
     fileIn.close();
     }
 }
+
+

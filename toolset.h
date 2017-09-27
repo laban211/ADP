@@ -7,7 +7,7 @@ class Toolset
 {
 public:
     enum ActiveToolset{
-    moveMode, deleteMode, resizeMode
+    moveMode, deleteMode, resizeMode, colorFillMode, pipettMode
     };
 
     Toolset(ActiveToolset activeToolset = moveMode) : _activeToolset(activeToolset){}
@@ -15,8 +15,9 @@ public:
     void *changeToolset(const ActiveToolset &activeToolset);
 
     bool isMove();
-
     bool isResize();
+    bool isColorFill();
+    bool isPipett();
 
     ~Toolset();
 

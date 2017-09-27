@@ -96,63 +96,33 @@ void MainDrawingWidget::paintEvent(QPaintEvent *event)
     }
 }
 
-void MainDrawingWidget::mousePressEvent(QMouseEvent *event){
-
+void MainDrawingWidget::mousePressEvent(QMouseEvent *event)
+{
   if(myToolset.isMove()){
-
+      qDebug() << "Flytta";
        _shapeMoving = shapeClicked(event->pos());
     if (_shapeMoving){
-        qDebug() << "Flytta";
         _positionOfShapeWhenClicked = _shapeMoving->_boundingRect.topLeft();
         _positionOfMouseWhenClicked = event->pos();
     }
   }
   else if(myToolset.isResize()){
-
       _shapeResizing = shapeClicked(event->pos());
       if(_shapeResizing){
-
                   _positionOfShapeWhenClicked = _shapeResizing->_boundingRect.topLeft();
                   _positionOfMouseWhenClicked = event->pos();
-  }
-    }
-  else if (myToolset.isColorFill()){
+              }
+  else if(myToolset.isColorFill()){
 
+          qDebug() << "Hejsan";
           _shapeTheme = shapeClicked(event->pos());
-
-          if(_shapeTheme){
-
           _shapeTheme->_colorFill = _currentShapeColor;
           _shapeTheme->_colorBorder = _currentBorderColor;
           _shapeTheme->_lineWidth = _currentBorderSize;
-          update();
-        }
-      }
-  else if (myToolset.isPipett()){
 
-          _shapeTheme = shapeClicked(event->pos());
-
-          if(_shapeTheme){
-          _currentShapeColor = _shapeTheme->_colorFill;
-          _currentBorderColor = _shapeTheme->_colorBorder;
-          _currentBorderSize = _shapeTheme->_lineWidth;
-
-          _colorBorderBoxColor = QString("background-color: %1").arg(_currentBorderColor.name());
-          colorBorderBox->setStyleSheet(_colorBorderBoxColor);
-
-          _colorShapeBoxColor = QString("background-color: %1").arg(_currentShapeColor.name());
-          colorShapeBox->setStyleSheet(_colorShapeBoxColor);
-
-          QString borderSize = QString::number(_currentBorderSize);
-          borderSizeBox->setText(borderSize);
-
-
-          update();
-        }
       }
 
-
-
+  }
     if(_penButtonChecked || _eraseButtonChecked){
         if (event->button() == Qt::LeftButton) {
                 _lastDrawingPoint = event->pos();
@@ -221,6 +191,8 @@ void MainDrawingWidget::showContextMenu(const QPoint &point)
 {
     QMenu menuCreate;
     menuCreate.setTitle("Shape");
+    QAction *actionApplyStyle = menuCreate.addAction("Apply style");
+    QAction *actionCopyStyle = menuCreate.addAction("Copy style");
     QAction *actionCopy = menuCreate.addAction("Copy");
     QAction *actionPaste = menuCreate.addAction("Paste");
     QAction *actionDelete = menuCreate.addAction("Delete");
@@ -250,6 +222,37 @@ void MainDrawingWidget::showContextMenu(const QPoint &point)
         _shapeFromIndex.push_back(shape);
         update();
     }
+   else if(actionChosen == actionApplyStyle){
+           for (int i=_shapeFromIndex.size()-1; i>=0; i-=1){
+                   if (containsPoint(_shapeFromIndex[i], point)){
+                    _shapeFromIndex[i]._colorFill = _currentShapeColor;
+                    _shapeFromIndex[i]._colorBorder = _currentBorderColor;
+                    _shapeFromIndex[i]._lineWidth = _currentBorderSize;
+                   }
+                   update();
+           }
+       }
+   else if(actionChosen == actionCopyStyle){
+               for (int i=_shapeFromIndex.size()-1; i>=0; i-=1){
+                       if (containsPoint(_shapeFromIndex[i], point)){
+
+                           _currentShapeColor = _shapeFromIndex[i]._colorFill;
+                           _currentBorderColor = _shapeFromIndex[i]._colorBorder;
+                           _currentBorderSize = _shapeFromIndex[i]._lineWidth;
+
+                           _colorBorderBoxColor = QString("background-color: %1").arg(_currentBorderColor.name());
+                           colorBorderBox->setStyleSheet(_colorBorderBoxColor);
+
+                           _colorShapeBoxColor = QString("background-color: %1").arg(_currentShapeColor.name());
+                           colorShapeBox->setStyleSheet(_colorShapeBoxColor);
+
+                           QString borderSize = QString::number(_currentBorderSize);
+                           borderSizeBox->setText(borderSize);
+
+                       }
+                       update();
+       }
+   }
 
 }
 
