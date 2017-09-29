@@ -1,17 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QDebug>
-#include "shape.h"
-#include <QFileDialog>
-#include <QPainter>
-#include <QLabel>
-#include <QDesktopWidget>
-#include <QTextStream>
-#include <QColorDialog>
-#include <QColor>
-#include <QPushButton>
-#include <QDataStream>
-#include <QInputDialog>
 
 extern std::vector<Shape> _shapeFromIndex;
 extern Toolset myToolset;
@@ -34,9 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createButtons();
 
-
-
-
     mainDrawingWidget = new MainDrawingWidget;
     setCentralWidget(mainDrawingWidget);
 }
@@ -52,8 +37,6 @@ void MainWindow::createButtons(){
     ui->rightToolBar->addWidget(shapeColorLabel);
     shapeColorLabel->setText("Shape Color:");
 
-
-
     colorShapeBox = new QPushButton(this);
     ui->rightToolBar->addWidget(colorShapeBox);
     colorShapeBox->setMinimumHeight(10);
@@ -63,8 +46,6 @@ void MainWindow::createButtons(){
     ui->rightToolBar->addWidget(borderColorLabel);
     borderColorLabel->setText("Border Color:");
 
-
-    //Creates Border Color box
     colorBorderBox = new QPushButton(this);
     ui->rightToolBar->addWidget(colorBorderBox);
     colorBorderBox->setMinimumHeight(10);
@@ -74,8 +55,6 @@ void MainWindow::createButtons(){
     ui->rightToolBar->addWidget(borderSizeLabel);
     borderSizeLabel->setText("Border Size:");
 
-
-    //skapar bordersize button
     borderSizeBox = new QPushButton(this);
     ui->rightToolBar->addWidget(borderSizeBox);
     borderSizeBox->setMinimumHeight(10);
@@ -91,7 +70,6 @@ void MainWindow::createButtons(){
     penButton->setIcon(penIcon);
     penButton->setIconSize(QSize(32, 32));
 
-
     eraseButton = new QPushButton(this);
     ui->leftToolBar->addWidget(eraseButton);
     eraseButton->setCheckable(true);
@@ -100,12 +78,11 @@ void MainWindow::createButtons(){
     eraseButton->setIcon(eraserIcon);
     eraseButton->setIconSize(QSize(32, 32));
 
-    connect(colorShapeBox, SIGNAL(clicked()), this, SLOT(on_actionColorpicker_triggered()));
-    connect(colorBorderBox, SIGNAL(clicked()), this, SLOT(on_actionBorderColor_triggered()));
-    connect(penButton, SIGNAL(clicked()), this, SLOT(on_penButton_clicked()));
-    connect(eraseButton, SIGNAL(clicked()), this, SLOT(on_eraseButton_clicked()));
-    connect(borderSizeBox, SIGNAL(clicked()), this, SLOT(on_actionBorderSize_triggered()));
-
+    connect(colorShapeBox, SIGNAL(clicked()), this, SLOT(colorPickerTrigged()));
+    connect(colorBorderBox, SIGNAL(clicked()), this, SLOT(BorderColorTriggered()));
+    connect(penButton, SIGNAL(clicked()), this, SLOT(penButtonClicked()));
+    connect(eraseButton, SIGNAL(clicked()), this, SLOT(eraseButtonClicked()));
+    connect(borderSizeBox, SIGNAL(clicked()), this, SLOT(actionBorderSizeTriggered()));
 }
 
 void MainWindow::on_actionSquare_triggered()
@@ -150,42 +127,38 @@ void MainWindow::on_actionOpen_triggered()
         mainDrawingWidget->openImage(fileName);
 }
 
-void MainWindow::on_actionColorpicker_triggered()
+void MainWindow::colorPickerTrigged()
 {
     QColor colorShapeTest = QColorDialog::getColor();
 
     if(colorShapeTest.isValid()){
-    _currentShapeColor = colorShapeTest;
-    _colorShapeBoxColor = QString("background-color: %1").arg(_currentShapeColor.name());
-    colorShapeBox->setStyleSheet(_colorShapeBoxColor);
+        _currentShapeColor = colorShapeTest;
+        _colorShapeBoxColor = QString("background-color: %1").arg(_currentShapeColor.name());
+        colorShapeBox->setStyleSheet(_colorShapeBoxColor);
     }
 }
 
-void MainWindow::on_actionBorderColor_triggered()
+void MainWindow::BorderColorTriggered()
 {
     QColor colorBorderTest = QColorDialog::getColor();
 
     if(colorBorderTest.isValid()){
-    _currentBorderColor = colorBorderTest;
-    _colorBorderBoxColor = QString("background-color: %1").arg(_currentBorderColor.name());
-    colorBorderBox->setStyleSheet(_colorBorderBoxColor);
+        _currentBorderColor = colorBorderTest;
+        _colorBorderBoxColor = QString("background-color: %1").arg(_currentBorderColor.name());
+        colorBorderBox->setStyleSheet(_colorBorderBoxColor);
     }
-
 }
 
-void MainWindow::on_actionBorderSize_triggered()
+void MainWindow::actionBorderSizeTriggered()
 {
     bool ok;
-    int borderSizeTest = QInputDialog::getInt(this, tr("Border Size"),
-                                              tr(" "), _currentBorderSize, 0, 50, 1, &ok);
-
+    int borderSizeTest = QInputDialog::getInt(this, tr("Border Size"),tr(" "), _currentBorderSize, 0, 50, 1, &ok);
     _currentBorderSize = borderSizeTest;
     QString borderSize = QString::number(_currentBorderSize);
     borderSizeBox->setText(borderSize);
-
 }
 
-void MainWindow::on_penButton_clicked()
+void MainWindow::penButtonClicked()
 {
     if(penButton->isChecked()){
         eraseButton->setChecked(false);
@@ -196,7 +169,7 @@ void MainWindow::on_penButton_clicked()
     }
 }
 
-void MainWindow::on_eraseButton_clicked()
+void MainWindow::eraseButtonClicked()
 {
     if(eraseButton->isChecked()){
         penButton->setChecked(false);
@@ -210,22 +183,37 @@ void MainWindow::on_eraseButton_clicked()
 void MainWindow::on_actionMove_triggered()
 {
     myToolset.changeToolset(Toolset::moveMode);
+    penButton->setChecked(false);
+    eraseButton->setChecked(false);
+    _eraseButtonChecked = false;
+    _penButtonChecked = false;
 }
 
 void MainWindow::on_actionResize_triggered()
 {
     myToolset.changeToolset(Toolset::resizeMode);
+    penButton->setChecked(false);
+    eraseButton->setChecked(false);
+    _eraseButtonChecked = false;
+    _penButtonChecked = false;
 }
 
 void MainWindow::on_actionColorfill_triggered()
 {
     myToolset.changeToolset(Toolset::colorFillMode);
+    penButton->setChecked(false);
+    eraseButton->setChecked(false);
+    _eraseButtonChecked = false;
+    _penButtonChecked = false;
 }
 
 void MainWindow::on_actionPipett_triggered()
 {
     myToolset.changeToolset(Toolset::pipettMode);
-
+    penButton->setChecked(false);
+    eraseButton->setChecked(false);
+    _eraseButtonChecked = false;
+    _penButtonChecked = false;
 }
 
 void MainWindow::on_actionSave_Image_Data_triggered()
@@ -257,10 +245,8 @@ void MainWindow::on_actionOpen_Image_Data_triggered()
     Shape shape;
     fileIn.setFileName(fileN);
     if(fileIn.open(QIODevice::ReadOnly)){
-
         dS.setDevice(&fileIn);
         dS.setVersion(QDataStream::Qt_5_9);
-
             while(!fileIn.atEnd()){
                 dS >> shape;
                 Shape newShape = shape;
@@ -270,5 +256,3 @@ void MainWindow::on_actionOpen_Image_Data_triggered()
     fileIn.close();
     }
 }
-
-

@@ -7,6 +7,9 @@
 #include <QTimer>
 #include <QGraphicsScene>
 #include "toolset.h"
+#include <QPainter>
+#include <QPaintEvent>
+#include <QMenu>
 
 class MainDrawingWidget : public QWidget
 {
@@ -35,7 +38,6 @@ private:
     QPoint _lastDrawingPoint;
     Shape *_shapeResizing = nullptr;
     Shape *_shapeTheme;
-
 
 protected:
     void paintEvent(QPaintEvent *event) override;

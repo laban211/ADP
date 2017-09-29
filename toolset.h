@@ -1,8 +1,6 @@
 #ifndef TOOLSET_H
 #define TOOLSET_H
 
-#include <QDebug>
-
 class Toolset
 {
 public:
@@ -18,10 +16,6 @@ public:
     bool isResize();
     bool isColorFill();
     bool isPipett();
-
-
-
-//protected:
 
     ActiveToolset _activeToolset;
 

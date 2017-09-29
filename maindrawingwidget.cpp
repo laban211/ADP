@@ -1,11 +1,5 @@
 #include "maindrawingwidget.h"
-#include <QPainter>
-#include <QPaintEvent>
-#include "shape.h"
-#include <QDebug>
-#include <QMenu>
 #include "mainwindow.h"
-#include "toolset.h"
 
 std::vector<Shape> _shapeFromIndex;
 extern bool _penButtonChecked;
@@ -34,7 +28,7 @@ bool MainDrawingWidget::openImage(const QString &fileName)
     QImage loadedImage;
 
     if (!loadedImage.load(fileName))
-            return false;
+        return false;
 
     QSize newSize = loadedImage.size().expandedTo(size());
     resizeImage(&loadedImage, newSize);
@@ -99,67 +93,55 @@ void MainDrawingWidget::paintEvent(QPaintEvent *event)
 void MainDrawingWidget::mousePressEvent(QMouseEvent *event){
 
   if(myToolset.isMove()){
-
        _shapeMoving = shapeClicked(event->pos());
     if (_shapeMoving){
-        qDebug() << "Flytta";
         _positionOfShapeWhenClicked = _shapeMoving->_boundingRect.topLeft();
         _positionOfMouseWhenClicked = event->pos();
     }
   }
-  else if(myToolset.isResize()){
-
-      _shapeResizing = shapeClicked(event->pos());
-      if(_shapeResizing){
-
-                  _positionOfShapeWhenClicked = _shapeResizing->_boundingRect.topLeft();
-                  _positionOfMouseWhenClicked = event->pos();
-  }
+    else if(myToolset.isResize()){
+        _shapeResizing = shapeClicked(event->pos());
+            if(_shapeResizing){
+                _positionOfShapeWhenClicked = _shapeResizing->_boundingRect.topLeft();
+                _positionOfMouseWhenClicked = event->pos();
     }
-  else if (myToolset.isColorFill()){
-
-          _shapeTheme = shapeClicked(event->pos());
-
-          if(_shapeTheme){
-
-          _shapeTheme->_colorFill = _currentShapeColor;
-          _shapeTheme->_colorBorder = _currentBorderColor;
-          _shapeTheme->_lineWidth = _currentBorderSize;
-          update();
+ }
+    else if (myToolset.isColorFill()){
+        _shapeTheme = shapeClicked(event->pos());
+            if(_shapeTheme){
+            _shapeTheme->_colorFill = _currentShapeColor;
+            _shapeTheme->_colorBorder = _currentBorderColor;
+            _shapeTheme->_lineWidth = _currentBorderSize;
+            update();
         }
       }
-  else if (myToolset.isPipett()){
+    else if (myToolset.isPipett()){
+        _shapeTheme = shapeClicked(event->pos());
 
-          _shapeTheme = shapeClicked(event->pos());
+        if(_shapeTheme){
+        _currentShapeColor = _shapeTheme->_colorFill;
+        _currentBorderColor = _shapeTheme->_colorBorder;
+        _currentBorderSize = _shapeTheme->_lineWidth;
 
-          if(_shapeTheme){
-          _currentShapeColor = _shapeTheme->_colorFill;
-          _currentBorderColor = _shapeTheme->_colorBorder;
-          _currentBorderSize = _shapeTheme->_lineWidth;
+        _colorBorderBoxColor = QString("background-color: %1").arg(_currentBorderColor.name());
+        colorBorderBox->setStyleSheet(_colorBorderBoxColor);
 
-          _colorBorderBoxColor = QString("background-color: %1").arg(_currentBorderColor.name());
-          colorBorderBox->setStyleSheet(_colorBorderBoxColor);
+        _colorShapeBoxColor = QString("background-color: %1").arg(_currentShapeColor.name());
+        colorShapeBox->setStyleSheet(_colorShapeBoxColor);
 
-          _colorShapeBoxColor = QString("background-color: %1").arg(_currentShapeColor.name());
-          colorShapeBox->setStyleSheet(_colorShapeBoxColor);
+        QString borderSize = QString::number(_currentBorderSize);
+        borderSizeBox->setText(borderSize);
 
-          QString borderSize = QString::number(_currentBorderSize);
-          borderSizeBox->setText(borderSize);
-
-
-          update();
+        update();
         }
       }
-
-
 
     if(_penButtonChecked || _eraseButtonChecked){
         if (event->button() == Qt::LeftButton) {
-                _lastDrawingPoint = event->pos();
-                _drawing = true;
+            _lastDrawingPoint = event->pos();
+            _drawing = true;
         }
-        }
-
+    }
 }
 
 void MainDrawingWidget::mouseMoveEvent(QMouseEvent *event)
@@ -176,13 +158,20 @@ void MainDrawingWidget::mouseMoveEvent(QMouseEvent *event)
     }
     else if(myToolset.isResize()){
         if(_shapeResizing){
-        QPoint positionOfMouseNow = event->pos();
-                    _shapeResizing->_boundingRect.setBottomRight(positionOfMouseNow);
-                    update();
+            QPoint positionOfMouseNow = event->pos();
+                _shapeResizing->_boundingRect.setBottomRight(positionOfMouseNow);
+                update();
+
+        if(_shapeResizing->_boundingRect.topLeft().x() >= _shapeResizing->_boundingRect.bottomRight().x() ||
+            _shapeResizing->_boundingRect.topLeft().y() >= _shapeResizing->_boundingRect.bottomRight().y())
+                {
+                    QSize minimumSize(5,5);
+                    _shapeResizing->_boundingRect.setSize(minimumSize);
+                }
         }
     }
-     if ((event->buttons() & Qt::LeftButton) && _drawing){
-            drawLineTo(event->pos());
+    if ((event->buttons() & Qt::LeftButton) && _drawing){
+        drawLineTo(event->pos());
         }
 }
 
@@ -211,8 +200,8 @@ bool MainDrawingWidget::containsPoint(Shape &shape, QPoint point)
 Shape *MainDrawingWidget::shapeClicked(QPoint point)
 {
     for (int i=_shapeFromIndex.size()-1; i>=0; i-=1){
-            if (containsPoint(_shapeFromIndex[i], point))
-                    return &_shapeFromIndex[i];
+        if (containsPoint(_shapeFromIndex[i], point))
+            return &_shapeFromIndex[i];
         }
     return nullptr;
 }
@@ -256,7 +245,7 @@ void MainDrawingWidget::showContextMenu(const QPoint &point)
 void MainDrawingWidget::resizeImage(QImage *image, const QSize &newSize)
 {
     if (image->size() == newSize)
-            return;
+        return;
 
     QImage newImage(newSize, QImage::Format_RGB32);
     newImage.fill(qRgb(255, 255, 255));
@@ -268,10 +257,10 @@ void MainDrawingWidget::resizeImage(QImage *image, const QSize &newSize)
 void MainDrawingWidget::resizeEvent(QResizeEvent *event)
 {
     if (width() > _img.width() || height() > _img.height()) {
-            int newWidth = qMax(width() + 164, _img.width());
-            int newHeight = qMax(height() + 164, _img.height());
-            resizeImage(&_img, QSize(newWidth, newHeight));
-            update();
+        int newWidth = qMax(width() + 164, _img.width());
+        int newHeight = qMax(height() + 164, _img.height());
+        resizeImage(&_img, QSize(newWidth, newHeight));
+        update();
         }
         QWidget::resizeEvent(event);
 }
